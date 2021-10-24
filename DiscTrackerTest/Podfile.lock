@@ -1,0 +1,16 @@
+PODS:
+  - BlueCapKit (0.7.0)
+
+DEPENDENCIES:
+  - BlueCapKit
+
+SPEC REPOS:
+  trunk:
+    - BlueCapKit
+
+SPEC CHECKSUMS:
+  BlueCapKit: b13b8715d4de6f325971c4dd5bc33598697dad2f
+
+PODFILE CHECKSUM: d8d872feafb9794d807a7525dd4ba915be40d43f
+
+COCOAPODS: 1.9.1
