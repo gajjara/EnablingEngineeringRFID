@@ -13,24 +13,25 @@ class ViewController: UIViewController {
     var synthesizer: AVSpeechSynthesizer!
     var bluetooth: Bluetooth!
     var prevTx: String! = ""
+    var prevTag: String! = ""
     var epcMessages: [String: String]! = [
-        "E200001D960801852620A1F0":"Tag 1",
-        "E200001D96080161262087C8": "Tag 2",
-        "E200001D960802312650D263": "Tag 3",
-        "E200001D9608015326207F08": "Tag 4",
-        "E200001D960802092640BB20": "Tag 5",
-        "E200001D960802192640CAED": "Tag 6",
-        "E200001D960802032640BB1D": "Tag 7",
-        "E200001D9608016026207FF8": "Tag 8",
-        "E200001D9608017126209939": "Tag 9",
-        "E200001D9608015226207738": "Tag 10",
-        "E200001D960801972620B2DE": "Tag 11",
-        "E200001D960802282640CB42": "Tag 12",
+        "E200001D960801852620A1F0": "Entrance turn right for coffe and pastries, and turn left for all the other groceries",
+        "E200001D96080161262087C8": "Floral on your right side, produce on your left side, and go straight for other groceries",
+        "E200001D960802312650D263": "Fresh fruit and veggies are on your left side, dairy aisle is on your right side",
+        "E200001D9608015326207F08": "Baking aisle is on your right side, and cereals are on your left",
+        "E200001D960802092640BB20": "Apple Jacks, Boo Berry, and Crispix are on your right.",
+        "E200001D960802192640CAED": "Tag 6, Turn Left",
+        "E200001D960802032640BB1D": "Tag 7, Turn Left",
+        "E200001D9608016026207FF8": "Tag 8, Turn Left",
+        "E200001D9608017126209939": "Tag 9, Turn Right",
+        "E200001D9608015226207738": "Tag 10, Turn Right",
+        "E200001D960801972620B2DE": "Tag 11, Turn Right",
+        "E200001D960802282640CB42": "Tag 12, Turn Right",
         "E200001D960802342640D28":  "Tag 13",
-        "E200001D960801792620A1ED": "Tag 14",
-        "E200001D960802332640D25C": "Tag 15",
-        "E200001D960802272640D259": "Tag 16",
-        "E200001D960802302650CB3F": "Tag 17",
+        "E200001D960801792620A1ED": "Tag 14, Go Backward",
+        "E200001D960802332640D25C": "Tag 15, Go Backward",
+        "E200001D960802272640D259": "Tag 16, Go Backward",
+        "E200001D960802302650CB3F": "Tag 17, Go Backward",
         "E200001D960802052650BB26": "Tag 18",
         "E200001D9608017026209175": "Tag 19",
     ]
@@ -82,7 +83,6 @@ extension ViewController {
      */
     func speak(string: String) {
         let utterance = AVSpeechUtterance(string: string)
-        utterance.pitchMultiplier = 0.25
         self.synthesizer.speak(utterance)
     }
 }
@@ -112,15 +112,16 @@ extension ViewController {
         if(self.bluetooth.informRx) {
             // Update recieved value
             let val = self.bluetooth.rx
-            //print("Rx: " + val)
-            self.rxTextLabel.text = val
             
             let parsed = self.parseRawEPC(string: val)
             if parsed != "" {
-                let message = self.epcMessages[parsed]
-                self.rxTextLabel.text = message
-                if message != nil {
-                    self.speak(string: message!)
+                if parsed != prevTag {
+                    let message = self.epcMessages[parsed]
+                    self.rxTextLabel.text = message
+                    if message != nil {
+                        self.speak(string: message!)
+                    }
+                    prevTag = parsed
                 }
             }
             self.bluetooth.informRx = false
